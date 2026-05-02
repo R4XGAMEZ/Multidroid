@@ -102,11 +102,14 @@ jobs:
       - name: Find APKs
         run: find . -name "*.apk" | sort
 
+      - name: Find all APKs
+        run: find . -name "*.apk" -type f | sort
+
       - name: Upload APKs
         uses: actions/upload-artifact@v4
         with:
           name: multidroid-apks
           path: |
-            android/app/build/outputs/apk/release/*.apk
+            **/*.apk
           if-no-files-found: warn
           retention-days: 30
