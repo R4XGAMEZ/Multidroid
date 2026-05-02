@@ -26,12 +26,9 @@ jobs:
       - name: Generate Android project
         run: |
           flutter create --org com.multidroid --project-name multidroid /tmp/tempproject
-          echo "--- Generated android structure ---"
-          find /tmp/tempproject/android -type f | sort
           cp -r /tmp/tempproject/android/gradle android/
           cp /tmp/tempproject/android/gradle.properties android/
           cp -r /tmp/tempproject/android/app/src/main/res android/app/src/main/
-          # settings.gradle or settings.gradle.kts
           if [ -f /tmp/tempproject/android/settings.gradle ]; then
             cp /tmp/tempproject/android/settings.gradle android/
           fi
@@ -68,6 +65,7 @@ jobs:
                   targetSdk 35
                   versionCode 1
                   versionName "1.0.0"
+                  multiDexEnabled true
               }
               buildTypes {
                   release {
@@ -77,6 +75,7 @@ jobs:
                   }
               }
               compileOptions {
+                  coreLibraryDesugaringEnabled true
                   sourceCompatibility JavaVersion.VERSION_17
                   targetCompatibility JavaVersion.VERSION_17
               }
@@ -88,6 +87,7 @@ jobs:
               source "../.."
           }
           dependencies {
+              coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.0.4"
               implementation "dev.rikka.shizuku:api:13.1.5"
               implementation "dev.rikka.shizuku:provider:13.1.5"
           }
