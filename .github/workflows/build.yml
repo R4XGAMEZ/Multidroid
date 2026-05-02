@@ -107,7 +107,6 @@ jobs:
         with:
           name: multidroid-apks
           path: |
-            build/app/outputs/**/*.apk
-            build/app/outputs/flutter-apk/*.apk
+            android/app/build/outputs/apk/release/*.apk
           if-no-files-found: warn
           retention-days: 30
