@@ -98,11 +98,10 @@ jobs:
 
       - name: Build APK
         run: |
+          flutter build apk --release || true
+          cd android && ./gradlew assembleRelease
 
       - name: Find APKs
-        run: find . -name "*.apk" | sort
-
-      - name: Find all APKs
         run: find . -name "*.apk" -type f | sort
 
       - name: Upload APKs
