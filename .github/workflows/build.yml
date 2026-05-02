@@ -26,10 +26,18 @@ jobs:
       - name: Generate Android project
         run: |
           flutter create --org com.multidroid --project-name multidroid /tmp/tempproject
+          echo "--- Generated android structure ---"
+          find /tmp/tempproject/android -type f | sort
           cp -r /tmp/tempproject/android/gradle android/
           cp /tmp/tempproject/android/gradle.properties android/
-          cp /tmp/tempproject/android/settings.gradle android/
           cp -r /tmp/tempproject/android/app/src/main/res android/app/src/main/
+          # settings.gradle or settings.gradle.kts
+          if [ -f /tmp/tempproject/android/settings.gradle ]; then
+            cp /tmp/tempproject/android/settings.gradle android/
+          fi
+          if [ -f /tmp/tempproject/android/settings.gradle.kts ]; then
+            cp /tmp/tempproject/android/settings.gradle.kts android/
+          fi
 
       - name: Write build.gradle
         run: |
@@ -53,11 +61,11 @@ jobs:
           }
           android {
               namespace "com.multidroid.app"
-              compileSdk 34
+              compileSdk 35
               defaultConfig {
                   applicationId "com.multidroid.app"
                   minSdk 26
-                  targetSdk 34
+                  targetSdk 35
                   versionCode 1
                   versionName "1.0.0"
               }
@@ -84,11 +92,6 @@ jobs:
               implementation "dev.rikka.shizuku:provider:13.1.5"
           }
           GRADLE
-
-      - name: Fix Kotlin version
-        run: |
-          sed -i "s/kotlin(\"jvm\") version \"[^\"]*\"/kotlin(\"jvm\") version \"1.9.22\"/" android/settings.gradle
-          sed -i "s/kotlin-android.*version.*\"[^\"]*\"/kotlin-android\" version \"1.9.22\"/" android/settings.gradle
 
       - name: Flutter pub get
         run: flutter pub get
