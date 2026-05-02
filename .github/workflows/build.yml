@@ -30,11 +30,16 @@ jobs:
         run: |
           flutter create --org com.multidroid --project-name multidroid /tmp/tempproject
           cp -r /tmp/tempproject/android/gradle android/
-          cp -r /tmp/tempproject/android/gradle.properties android/
+          cp /tmp/tempproject/android/gradle.properties android/
           cp /tmp/tempproject/android/build.gradle android/
           cp /tmp/tempproject/android/settings.gradle android/
           cp /tmp/tempproject/android/app/build.gradle android/app/
-          cp /tmp/tempproject/android/app/src/main/res -r android/app/src/main/
+          cp -r /tmp/tempproject/android/app/src/main/res android/app/src/main/
+
+      - name: Fix Kotlin version
+        run: |
+          sed -i 's/org.jetbrains.kotlin.android" version "[^"]*"/org.jetbrains.kotlin.android" version "1.9.22"/' android/settings.gradle
+          cat android/settings.gradle
 
       - name: Get Flutter dependencies
         run: flutter pub get
