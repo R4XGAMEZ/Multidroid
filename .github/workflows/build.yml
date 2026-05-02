@@ -39,7 +39,11 @@ jobs:
       - name: Fix Kotlin version
         run: |
           sed -i 's/org.jetbrains.kotlin.android" version "[^"]*"/org.jetbrains.kotlin.android" version "1.9.22"/' android/settings.gradle
-          cat android/settings.gradle
+
+      - name: Add Shizuku dependency
+        run: |
+          sed -i '/dependencies {/a\    implementation "dev.rikka.shizuku:api:13.1.5"\n    implementation "dev.rikka.shizuku:provider:13.1.5"' android/app/build.gradle
+          sed -i '/repositories {/a\    maven { url "https://jitpack.io" }' android/build.gradle
 
       - name: Get Flutter dependencies
         run: flutter pub get
