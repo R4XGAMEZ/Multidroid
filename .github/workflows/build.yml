@@ -65,6 +65,7 @@ jobs:
                   release {
                       signingConfig signingConfigs.debug
                       minifyEnabled false
+                      shrinkResources false
                   }
               }
               compileOptions {
@@ -84,20 +85,16 @@ jobs:
           }
           GRADLE
 
-      - name: Fix Kotlin in generated settings.gradle
+      - name: Fix Kotlin version
         run: |
-          echo "--- Before ---"
-          cat android/settings.gradle
           sed -i "s/kotlin(\"jvm\") version \"[^\"]*\"/kotlin(\"jvm\") version \"1.9.22\"/" android/settings.gradle
           sed -i "s/kotlin-android.*version.*\"[^\"]*\"/kotlin-android\" version \"1.9.22\"/" android/settings.gradle
-          echo "--- After ---"
-          cat android/settings.gradle
 
       - name: Flutter pub get
         run: flutter pub get
 
       - name: Build APK
-        run: flutter build apk --release --split-per-abi --no-shrink
+        run: flutter build apk --release --split-per-abi
 
       - name: Upload APKs
         uses: actions/upload-artifact@v4
